@@ -152,6 +152,6 @@ class CategoryServiceTest {
 
 
         assertThat(result, equalTo(given));
-
+        then(repository).should().save(given);
     }
 }
