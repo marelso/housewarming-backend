@@ -5,9 +5,11 @@ import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import com.tah.housewarming.fixture.CategoryFixture;
@@ -76,6 +78,27 @@ class CategoryServiceTest {
         given(repository.save(given)).willReturn(given);
 
 
-        var result = subject.create();
+        var result = subject.create(given);
+
+
+        assertThat(result, equalTo(given));
+        then(repository).should().save(given);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenGivenNameAlreadyExist() {
+        var name = "test";
+        var given = CategoryFixture.get()
+                .random()
+                .withName(name)
+                .build();
+
+        given(repository.findByName(name)).willReturn(Optional.of(given));
+
+
+        catchException(() -> subject.create(given));
+
+
+        assertThat(caughtException(), instanceOf(RuntimeException.class));
     }
 }
