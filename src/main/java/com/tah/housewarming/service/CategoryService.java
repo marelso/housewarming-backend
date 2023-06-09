@@ -15,4 +15,9 @@ public class CategoryService {
     public List<Category> findAll() {
         return this.repository.findAll();
     }
+
+    public Category findById(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("There is no category with id: " + id));
+    }
 }
