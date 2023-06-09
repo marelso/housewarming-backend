@@ -6,11 +6,18 @@ import java.util.Random;
 
 public class RandomGenerator {
     public static Integer integer() {
-        return randomInt();
+        return randomInt(null);
     }
 
-    private static Integer randomInt() {
-        return new Random().nextInt(Integer.MAX_VALUE);
+    public static Integer integer(Integer bound) {
+        return randomInt(bound);
+    }
+
+    private static Integer randomInt(Integer bound) {
+        if(bound == null)
+            bound = Integer.MAX_VALUE;
+
+        return new Random().nextInt(bound);
     }
 
     public static String string() {
@@ -24,7 +31,7 @@ public class RandomGenerator {
     private static String randomString(Integer bound) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < bound; i++) {
-            char c = (char) (randomInt() + 'a');
+            char c = (char) (randomInt(null) + 'a');
             sb.append(c);
         }
 
@@ -32,14 +39,14 @@ public class RandomGenerator {
     }
 
     public static List<String> stringList() {
-        return randomList(randomInt());
+        return randomList(randomInt(null));
     }
 
     private static List<String> randomList(Integer count) {
         List<String> list = new ArrayList<>();
 
         for(var i = 0; i < count; i++){
-            list.add(randomString(randomInt()));
+            list.add(randomString(randomInt(null)));
         }
 
         return list;
