@@ -41,7 +41,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenIdArentInDatabase() {
+    public void shouldFindGivenIdInDatabase() {
         var id = 1;
         var given = CategoryFixture.get().random().withId(id).build();
 
