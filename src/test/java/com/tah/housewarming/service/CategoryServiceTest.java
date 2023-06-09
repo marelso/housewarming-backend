@@ -5,6 +5,7 @@ import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -127,5 +128,30 @@ class CategoryServiceTest {
 
         assertThat(caughtException(), instanceOf(RuntimeException.class));
         verifyNoInteractions(factory);
+    }
+
+    @Test
+    public void shouldUpdateCategoryCorrectly() {
+        var id = 1;
+        var given = CategoryFixture.get()
+                .random()
+                .withId(id)
+                .build();
+
+        var existing = CategoryFixture.get()
+                .random()
+                .withId(id)
+                .build();
+
+        given(repository.findById(id)).willReturn(Optional.of(existing));
+        given(repository.save(given)).willReturn(given);
+        given(factory.from(given, existing)).willReturn(given);
+
+
+        var result = subject.update(given);
+
+
+        assertThat(result, equalTo(given));
+
     }
 }
