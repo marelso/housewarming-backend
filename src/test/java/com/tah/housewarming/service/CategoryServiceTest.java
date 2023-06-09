@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +27,7 @@ class CategoryServiceTest {
     private CategoryRepository repository;
 
     @InjectMocks
-    private CategoryService service;
+    private CategoryService subject;
 
     @Test
     public void shouldFindAllCategoriesCorrectly() {
@@ -34,8 +35,20 @@ class CategoryServiceTest {
 
         given(repository.findAll()).willReturn(given);
 
-        var result = service.findAll();
+        var result = subject.findAll();
 
         assertThat(result, equalTo(given));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenIdArentInDatabase() {
+        var id = 1;
+        var given = CategoryFixture.get().random().withId(id).build();
+
+        given(repository.findById(id)).willReturn(Optional.of(given));
+
+        var result = subject.findById(id);
+
+        assertThat(result.getId(), equalTo(id));
     }
 }
