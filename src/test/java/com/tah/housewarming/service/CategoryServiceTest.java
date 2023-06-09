@@ -68,4 +68,14 @@ class CategoryServiceTest {
 
         assertThat(result.getId(), equalTo(id));
     }
+
+    @Test
+    public void shouldSaveCorrectlyGivenCategory() {
+        var given = CategoryFixture.get().random().build();
+
+        given(repository.save(given)).willReturn(given);
+
+
+        var result = subject.create();
+    }
 }
