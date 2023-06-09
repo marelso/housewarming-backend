@@ -39,14 +39,14 @@ public class RandomGenerator {
     }
 
     public static List<String> stringList() {
-        return randomList(randomInt(null));
+        return randomList(randomInt(15));
     }
 
     private static List<String> randomList(Integer count) {
         List<String> list = new ArrayList<>();
 
         for(var i = 0; i < count; i++){
-            list.add(randomString(randomInt(null)));
+            list.add(randomString(randomInt(45)));
         }
 
         return list;
