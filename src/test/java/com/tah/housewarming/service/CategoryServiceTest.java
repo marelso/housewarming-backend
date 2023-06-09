@@ -12,6 +12,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+import com.tah.housewarming.factory.CategoryFactory;
 import com.tah.housewarming.fixture.CategoryFixture;
 import com.tah.housewarming.repository.CategoryRepository;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,8 @@ import java.util.Optional;
 class CategoryServiceTest {
     @Mock
     private CategoryRepository repository;
+    @Mock
+    private CategoryFactory factory;
 
     @InjectMocks
     private CategoryService subject;
@@ -73,12 +76,17 @@ class CategoryServiceTest {
 
     @Test
     public void shouldSaveCorrectlyGivenCategory() {
-        var given = CategoryFixture.get().random().build();
+        var name = "test";
+        var given = CategoryFixture.get()
+                .random()
+                .withName(name)
+                .build();
 
+        given(factory.from(name)).willReturn(given);
         given(repository.save(given)).willReturn(given);
 
 
-        var result = subject.create(given);
+        var result = subject.create(name);
 
 
         assertThat(result, equalTo(given));
@@ -96,26 +104,10 @@ class CategoryServiceTest {
         given(repository.findByName(name)).willReturn(Optional.of(given));
 
 
-        catchException(() -> subject.create(given));
+        catchException(() -> subject.create(name));
 
 
         assertThat(caughtException(), instanceOf(RuntimeException.class));
-    }
-
-    @Test
-    public void shouldThrowExceptionWhenGivenIdAlreadyExist() {
-        var id = 1;
-        var given = CategoryFixture.get()
-                .random()
-                .withId(id)
-                .build();
-
-        given(repository.findById(id)).willReturn(Optional.of(given));
-
-
-        catchException(() -> subject.create(given));
-
-
-        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        verifyNoInteractions(factory);
     }
 }
