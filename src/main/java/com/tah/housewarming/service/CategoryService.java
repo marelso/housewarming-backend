@@ -1,6 +1,7 @@
 package com.tah.housewarming.service;
 
 import com.tah.housewarming.domain.Category;
+import com.tah.housewarming.factory.CategoryFactory;
 import com.tah.housewarming.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository repository;
+    private final CategoryFactory factory;
 
     public List<Category> findAll() {
         return this.repository.findAll();
@@ -26,17 +28,16 @@ public class CategoryService {
         return repository.findById(id);
     }
 
-    public Category create(Category category) {
-        if(categoryAlreadyTaken(category.getId(), category.getName()))
+    public Category create(String category) {
+        if(categoryAlreadyTaken(category))
             throw new RuntimeException("This category already exists.");
 
-        return this.repository.save(category);
+        return this.repository.save(factory.from(category));
     }
 
-    private boolean categoryAlreadyTaken(Integer id, String name) {
-        var containsId = repository.findById(id);
+    private boolean categoryAlreadyTaken(String name) {
         var containsName = repository.findByName(name);
 
-        return containsId.isPresent() || containsName.isPresent();
+        return containsName.isPresent();
     }
 }
