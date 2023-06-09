@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: 'housewarming'
+      POSTGRES_USER: 'housewarmingadm'
+      POSTGRES_PASSWORD: 'housewarmingpass'
+    ports:
+      - 5432:5432
