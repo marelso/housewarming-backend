@@ -44,7 +44,7 @@ public class CategoryService {
     public Category update(Category category) {
         var existingCategory = findById(category.getId());
 
-        existingCategory = factory.from(category);
+        existingCategory = factory.from(category, existingCategory);
 
         return repository.save(existingCategory);
     }
