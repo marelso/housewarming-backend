@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.Id;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Product {
+    @Id
     private Integer id;
     private String name;
     private String description;
