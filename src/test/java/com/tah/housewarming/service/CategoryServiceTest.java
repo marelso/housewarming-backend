@@ -5,8 +5,6 @@ import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.then;
@@ -153,5 +151,19 @@ class CategoryServiceTest {
 
         assertThat(result, equalTo(given));
         then(repository).should().save(given);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDeleteAnInvalidId() {
+        var id = 1;
+
+        given(repository.findById(id)).willReturn(Optional.empty());
+
+
+        catchException(() -> subject.delete(id));
+
+
+        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        verifyNoMoreInteractions(repository);
     }
 }

@@ -48,4 +48,10 @@ public class CategoryService {
 
         return repository.save(existingCategory);
     }
+
+    public void delete(int id) {
+        var category = findById(id);
+
+        repository.delete(category);
+    }
 }
