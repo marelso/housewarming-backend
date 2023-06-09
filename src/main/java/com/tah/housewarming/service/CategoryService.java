@@ -36,9 +36,9 @@ public class CategoryService {
     }
 
     private boolean categoryAlreadyTaken(String name) {
-        var containsName = repository.findByName(name);
+        var category = repository.findByName(name);
 
-        return containsName.isPresent();
+        return category.isPresent();
     }
 
     public Category update(Category category) {
