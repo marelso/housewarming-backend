@@ -1,5 +1,6 @@
 package com.tah.housewarming.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Product {
     private Integer id;
     private String name;
@@ -14,4 +16,8 @@ public class Product {
     private String brand;
     private Integer count;
     private List<String> linksList;
+
+    public Boolean isProductAvailable() {
+        return !(this.count <= 0);
+    }
 }
