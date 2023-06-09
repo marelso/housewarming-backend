@@ -30,4 +30,16 @@ class ProductTest {
 
         assertFalse(result);
     }
+
+    @Test
+    public void shouldBeUnavailableWhenCountIsNull() {
+        var product = ProductFixture.get()
+                .random()
+                .withCount(null)
+                .build();
+
+        var result = product.isProductAvailable();
+
+        assertFalse(result);
+    }
 }
