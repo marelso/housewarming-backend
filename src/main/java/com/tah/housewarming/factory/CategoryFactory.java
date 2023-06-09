@@ -13,8 +13,8 @@ public class CategoryFactory {
         return category;
     }
 
-    public Category from(Category category) {
-        return new Category(category.getId(), category.getName());
+    public Category from(Category category, Category existing) {
+        return new Category(existing.getId(), category.getName());
     }
 
 }
