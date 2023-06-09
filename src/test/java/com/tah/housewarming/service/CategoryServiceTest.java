@@ -110,4 +110,22 @@ class CategoryServiceTest {
         assertThat(caughtException(), instanceOf(RuntimeException.class));
         verifyNoInteractions(factory);
     }
+
+    @Test
+    public void shouldThrowExceptionWhenUpdatingGivenCategoryThatDoesNotExist() {
+        var id = 1;
+        var given = CategoryFixture.get()
+                .random()
+                .withId(id)
+                .build();
+
+        given(repository.findById(id)).willReturn(Optional.empty());
+
+
+        catchException(() -> subject.update(given));
+
+
+        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        verifyNoInteractions(factory);
+    }
 }
