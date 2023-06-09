@@ -40,4 +40,12 @@ public class CategoryService {
 
         return containsName.isPresent();
     }
+
+    public Category update(Category category) {
+        var existingCategory = findById(category.getId());
+
+        existingCategory = factory.from(category);
+
+        return repository.save(existingCategory);
+    }
 }
