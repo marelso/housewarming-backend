@@ -6,12 +6,19 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/categories")
 @RequiredArgsConstructor
 @Api(tags = "Category", description = "CRUD of categories.")
 public class CategoryController {
     private final CategoryService service;
+
+    @GetMapping()
+    public List<Category> findAll() {
+        return this.service.findAll();
+    }
 
     @GetMapping("/{id}")
     public Category get(@PathVariable("categoryId") Integer id) {
