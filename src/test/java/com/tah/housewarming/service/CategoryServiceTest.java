@@ -101,4 +101,21 @@ class CategoryServiceTest {
 
         assertThat(caughtException(), instanceOf(RuntimeException.class));
     }
+
+    @Test
+    public void shouldThrowExceptionWhenGivenIdAlreadyExist() {
+        var id = 1;
+        var given = CategoryFixture.get()
+                .random()
+                .withId(id)
+                .build();
+
+        given(repository.findById(id)).willReturn(Optional.of(given));
+
+
+        catchException(() -> subject.create(given));
+
+
+        assertThat(caughtException(), instanceOf(RuntimeException.class));
+    }
 }
