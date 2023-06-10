@@ -70,4 +70,27 @@ class ProductServiceTest {
 
         assertThat(result, equalTo(given));
     }
+
+    @Test
+    public void shouldThrowExceptionWhenCreatingExistingProduct() {
+        var product = "product";
+        var brand = "brand";
+        var given = ProductFixture.get()
+                .random()
+                .withName(product)
+                .withBrand(brand)
+                .build();
+
+        given(repository.findByName(product)).willReturn(Optional.of(given));
+        given(repository.findByBrand(brand)).willReturn(Optional.of(given));
+
+
+        catchException(() -> subject.create());
+
+    }
+
+    @Test
+    public void shouldCreateProductCorrectly() {
+
+    }
 }
