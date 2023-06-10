@@ -41,8 +41,11 @@ public class CategoryService {
         return category.isPresent();
     }
 
-    public Category update(Category category) {
-        var existingCategory = findById(category.getId());
+    public Category update(Integer id, Category category) {
+        var existingCategory = findById(id);
+
+        if(categoryAlreadyTaken(category.getName()))
+            throw new RuntimeException("This category already exists.");
 
         existingCategory = factory.from(category, existingCategory);
 
