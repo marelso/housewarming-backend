@@ -1,5 +1,7 @@
 package com.tah.housewarming.service;
 
+import com.tah.housewarming.exception.IncorrectValueException;
+import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.fixture.CreateProductDTOFixture;
 import com.tah.housewarming.fixture.ProductFixture;
 import com.tah.housewarming.repository.ProductRepository;
@@ -83,6 +85,8 @@ class ProductServiceTest {
                 .build();
         var given = CreateProductDTOFixture.get()
                 .random()
+                .withName(product)
+                .withBrand(brand)
                 .build();
 
 
@@ -93,14 +97,26 @@ class ProductServiceTest {
         catchException(() -> subject.create(given));
 
 
-        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        assertThat(caughtException(), instanceOf(IncorrectValueException.class));
     }
 
     @Test
     public void shouldThrowExceptionWhenCreatingProductToInvalidCategory() {
+        var categories = List.of(1);
         var given = CreateProductDTOFixture.get()
                 .random()
+                .withCategories(categories)
                 .build();
+
+        given(repository.findByName(given.getName())).willReturn(Optional.empty());
+        given(repository.findByBrand(given.getBrand())).willReturn(Optional.empty());
+
+
+        catchException(() -> subject.create(given));
+
+
+        assertThat(caughtException(), instanceOf(NotFoundException.class));
+
     }
 
     @Test
