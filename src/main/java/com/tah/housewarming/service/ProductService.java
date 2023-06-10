@@ -60,4 +60,10 @@ public class ProductService {
 
         return true;
     }
+
+    public void delete(Integer id) {
+        var product = findById(id);
+
+        repository.delete(product);
+    }
 }
