@@ -1,8 +1,11 @@
 package com.tah.housewarming.service;
 
+import com.tah.housewarming.dto.factory.ProductFactory;
 import com.tah.housewarming.exception.IncorrectValueException;
 import com.tah.housewarming.exception.NotFoundException;
+import com.tah.housewarming.fixture.CategoryFixture;
 import com.tah.housewarming.fixture.CreateProductDTOFixture;
+import com.tah.housewarming.fixture.ProductDTOFixture;
 import com.tah.housewarming.fixture.ProductFixture;
 import com.tah.housewarming.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -19,12 +22,16 @@ import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
+    @Mock
+    private ProductFactory factory;
     @Mock
     private ProductRepository repository;
     @Mock
@@ -123,6 +130,31 @@ class ProductServiceTest {
 
     @Test
     public void shouldCreateProductCorrectly() {
+        var id = 1;
+        var category = CategoryFixture.get()
+                .random()
+                .withId(id)
+                .build();
+        var given = CreateProductDTOFixture.get()
+                .random()
+                .withCategories(List.of(id))
+                .build();
+        var product = ProductFixture.get().random().build();
+        var expected = ProductDTOFixture.get().random().build();
 
+        given(repository.findByName(given.getName())).willReturn(Optional.empty());
+        given(repository.findByBrand(given.getBrand())).willReturn(Optional.empty());
+        given(repository.save(product)).willReturn(product);
+        given(categoryService.findById(id)).willReturn(category);
+
+        given(factory.from(given)).willReturn(product);
+        given(factory.from(product)).willReturn(expected);
+
+
+        var result = subject.create(given);
+
+
+        assertThat(result, equalTo(expected));
+        then(repository).should().save(product);
     }
 }
