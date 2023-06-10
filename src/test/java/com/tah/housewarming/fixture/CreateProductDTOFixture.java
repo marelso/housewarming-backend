@@ -42,4 +42,34 @@ public class CreateProductDTOFixture {
         this.categories = RandomGenerator.integerList();
         return this;
     }
+
+    public CreateProductDTOFixture withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public CreateProductDTOFixture withDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public CreateProductDTOFixture withBrand(String brand) {
+        this.brand = brand;
+        return this;
+    }
+
+    public CreateProductDTOFixture withCount(Integer count) {
+        this.count = count;
+        return this;
+    }
+
+    public CreateProductDTOFixture withLinks(List<String> links) {
+        this.linksList = links;
+        return this;
+    }
+
+    public CreateProductDTOFixture withCategories(List<Integer> categories) {
+        this.categories = categories;
+        return this;
+    }
 }
