@@ -12,6 +12,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import com.tah.housewarming.dto.factory.CategoryFactory;
+import com.tah.housewarming.exception.IncorrectValueException;
+import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.fixture.CategoryFixture;
 import com.tah.housewarming.repository.CategoryRepository;
 import org.junit.jupiter.api.Test;
@@ -56,7 +58,7 @@ class CategoryServiceTest {
         catchException(() -> subject.findById(id));
 
 
-        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        assertThat(caughtException(), instanceOf(NotFoundException.class));
         then(repository).should().findById(id);
         verifyNoMoreInteractions(repository);
     }
@@ -106,7 +108,7 @@ class CategoryServiceTest {
         catchException(() -> subject.create(name));
 
 
-        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        assertThat(caughtException(), instanceOf(IncorrectValueException.class));
         verifyNoInteractions(factory);
     }
 
@@ -124,7 +126,7 @@ class CategoryServiceTest {
         catchException(() -> subject.update(id, given));
 
 
-        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        assertThat(caughtException(), instanceOf(NotFoundException.class));
         verifyNoInteractions(factory);
     }
 
@@ -163,7 +165,7 @@ class CategoryServiceTest {
         catchException(() -> subject.delete(id));
 
 
-        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        assertThat(caughtException(), instanceOf(NotFoundException.class));
         verifyNoMoreInteractions(repository);
     }
 }
