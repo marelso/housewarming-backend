@@ -2,6 +2,8 @@ package com.tah.housewarming.service;
 
 import com.tah.housewarming.domain.Category;
 import com.tah.housewarming.dto.factory.CategoryFactory;
+import com.tah.housewarming.exception.IncorrectValueException;
+import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class CategoryService {
 
     public Category findById(Integer id) {
         return get(id)
-                .orElseThrow(() -> new RuntimeException("There is no category with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Category" + id));
     }
 
     public Optional<Category> get(Integer id) {
@@ -30,7 +32,7 @@ public class CategoryService {
 
     public Category create(String category) {
         if(categoryAlreadyTaken(category))
-            throw new RuntimeException("This category already exists.");
+            throw new IncorrectValueException("This category already exists.");
 
         return this.repository.save(factory.from(category));
     }
@@ -45,7 +47,7 @@ public class CategoryService {
         var existingCategory = findById(id);
 
         if(categoryAlreadyTaken(category.getName()))
-            throw new RuntimeException("This category already exists.");
+            throw new IncorrectValueException("This category already exists.");
 
         existingCategory = factory.from(category, existingCategory);
 
