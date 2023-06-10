@@ -4,6 +4,7 @@ import com.tah.housewarming.domain.Product;
 import com.tah.housewarming.dto.CreateProductDTO;
 import com.tah.housewarming.dto.ProductDTO;
 import com.tah.housewarming.exception.IncorrectValueException;
+import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository repository;
+    private final CategoryService categoryService;
 
     public Product findById(Integer id) {
         return get(id)
@@ -33,7 +35,9 @@ public class ProductService {
         if(productAlreadyExist(given.getName(), given.getBrand()))
             throw new IncorrectValueException("This product already exist on database");
 
-
+        if(!categoryDoesExist(given.getCategories())) {
+            throw new NotFoundException("Invalid category list");
+        }
 
         return null;
     }
@@ -43,5 +47,11 @@ public class ProductService {
         var brand = repository.findByBrand(productBrand);
 
         return name.isPresent() && brand.isPresent();
+    }
+
+    private Boolean categoryDoesExist(List<Integer> ids) {
+        ids.forEach(categoryService::findById);
+
+        return true;
     }
 }
