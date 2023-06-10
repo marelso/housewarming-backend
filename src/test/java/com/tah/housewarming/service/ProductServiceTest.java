@@ -1,5 +1,6 @@
 package com.tah.housewarming.service;
 
+import com.tah.housewarming.fixture.CreateProductDTOFixture;
 import com.tah.housewarming.fixture.ProductFixture;
 import com.tah.housewarming.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -75,17 +76,21 @@ class ProductServiceTest {
     public void shouldThrowExceptionWhenCreatingExistingProduct() {
         var product = "product";
         var brand = "brand";
-        var given = ProductFixture.get()
+        var existing = ProductFixture.get()
                 .random()
                 .withName(product)
                 .withBrand(brand)
                 .build();
+        var given = CreateProductDTOFixture.get()
+                .random()
+                .build();
 
-        given(repository.findByName(product)).willReturn(Optional.of(given));
-        given(repository.findByBrand(brand)).willReturn(Optional.of(given));
+
+        given(repository.findByName(product)).willReturn(Optional.of(existing));
+        given(repository.findByBrand(brand)).willReturn(Optional.of(existing));
 
 
-        catchException(() -> subject.create());
+        catchException(() -> subject.create(given));
 
     }
 
