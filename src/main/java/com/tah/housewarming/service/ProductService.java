@@ -5,6 +5,7 @@ import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,5 +20,9 @@ public class ProductService {
 
     private Optional<Product> get(Integer id) {
         return this.repository.findById(id);
+    }
+
+    public List<Product> findAll() {
+        return this.repository.findAll();
     }
 }
