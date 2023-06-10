@@ -22,8 +22,6 @@ import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -156,5 +154,24 @@ class ProductServiceTest {
 
         assertThat(result, equalTo(expected));
         then(repository).should().save(product);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDeletingInvalidProduct() {
+        var id = 1;
+        var given = ProductFixture.get()
+                .random()
+                .withId(id)
+                .build();
+
+        given(repository.findById(id)).willReturn(Optional.of(given));
+
+
+        catchException(() -> subject.delete(id));
+    }
+
+    @Test
+    public void shouldDeleteProductCorrectly() {
+
     }
 }
