@@ -24,7 +24,7 @@ public class ProductService {
 
     public Product findById(Integer id) {
         return get(id)
-                .orElseThrow(() -> new RuntimeException("There is no product with id: " + id));
+                .orElseThrow(() -> new NotFoundException("There is no product with id: " + id));
     }
 
     private Optional<Product> get(Integer id) {
