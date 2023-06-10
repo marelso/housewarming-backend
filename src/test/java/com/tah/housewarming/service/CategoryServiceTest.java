@@ -11,7 +11,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import com.tah.housewarming.factory.CategoryFactory;
+import com.tah.housewarming.dto.factory.CategoryFactory;
 import com.tah.housewarming.fixture.CategoryFixture;
 import com.tah.housewarming.repository.CategoryRepository;
 import org.junit.jupiter.api.Test;

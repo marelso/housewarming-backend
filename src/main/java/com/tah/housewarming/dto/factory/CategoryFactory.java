@@ -1,4 +1,4 @@
-package com.tah.housewarming.factory;
+package com.tah.housewarming.dto.factory;
 
 import com.tah.housewarming.domain.Category;
 import org.springframework.stereotype.Component;

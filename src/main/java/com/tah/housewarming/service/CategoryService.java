@@ -1,7 +1,7 @@
 package com.tah.housewarming.service;
 
 import com.tah.housewarming.domain.Category;
-import com.tah.housewarming.factory.CategoryFactory;
+import com.tah.housewarming.dto.factory.CategoryFactory;
 import com.tah.housewarming.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
