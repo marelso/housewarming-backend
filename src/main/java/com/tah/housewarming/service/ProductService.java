@@ -64,6 +64,6 @@ public class ProductService {
     public void delete(Integer id) {
         var product = findById(id);
 
-        repository.delete(product);
+        this.repository.delete(product);
     }
 }
