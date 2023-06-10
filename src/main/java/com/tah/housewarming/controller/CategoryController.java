@@ -24,4 +24,14 @@ public class CategoryController {
     public Category get(@PathVariable("categoryId") Integer id) {
         return this.service.findById(id);
     }
+
+    @PostMapping()
+    public Category create(@RequestBody String name) {
+        return this.service.create(name);
+    }
+
+    @PutMapping("/{id}")
+    public Category update(@RequestParam("categoryId") Integer id, @RequestBody Category category) {
+        return this.service.update(id, category);
+    }
 }
