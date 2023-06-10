@@ -45,7 +45,7 @@ public class ProductService {
 
         var product = factory.from(given);
 
-        return factory.from(this.repository.save(product), new ArrayList<String>());
+        return factory.from(this.repository.save(product));
     }
 
     private Boolean productAlreadyExist(String product, String productBrand) {
