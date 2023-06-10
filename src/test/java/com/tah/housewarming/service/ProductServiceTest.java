@@ -10,8 +10,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.googlecode.catchexception.CatchException.catchException;
+import static com.googlecode.catchexception.CatchException.caughtException;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -31,5 +36,8 @@ class ProductServiceTest {
         catchException(() -> subject.findById(id));
 
 
+        assertThat(caughtException(), instanceOf(RuntimeException.class));
+        then(repository).should().findById(id);
+        verifyNoMoreInteractions(repository);
     }
 }
