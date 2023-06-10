@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.googlecode.catchexception.CatchException.catchException;
@@ -55,5 +56,15 @@ class ProductServiceTest {
 
 
         assertThat(result, equalTo(given));
+    }
+
+    @Test
+    public void shouldReturnAllProductsCorrectly() {
+        var given = List.of(ProductFixture.get().random().build());
+
+        given(repository.findAll()).willReturn(given);
+
+
+        var result = subject.findAll();
     }
 }
