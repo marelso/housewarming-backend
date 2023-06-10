@@ -31,7 +31,12 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public Category update(@RequestParam("categoryId") Integer id, @RequestBody Category category) {
+    public Category update(@PathVariable("categoryId") Integer id, @RequestBody Category category) {
         return this.service.update(id, category);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("categoryId") Integer id) {
+        this.service.delete(id);
     }
 }
