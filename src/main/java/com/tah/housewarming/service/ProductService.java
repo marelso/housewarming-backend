@@ -1,6 +1,8 @@
 package com.tah.housewarming.service;
 
 import com.tah.housewarming.domain.Product;
+import com.tah.housewarming.dto.CreateProductDTO;
+import com.tah.housewarming.dto.ProductDTO;
 import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,5 +26,9 @@ public class ProductService {
 
     public List<Product> findAll() {
         return this.repository.findAll();
+    }
+
+    public ProductDTO create(CreateProductDTO given) {
+        return null;
     }
 }
