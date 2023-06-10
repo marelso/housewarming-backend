@@ -66,5 +66,8 @@ class ProductServiceTest {
 
 
         var result = subject.findAll();
+
+
+        assertThat(result, equalTo(given));
     }
 }
