@@ -164,10 +164,13 @@ class ProductServiceTest {
                 .withId(id)
                 .build();
 
-        given(repository.findById(id)).willReturn(Optional.of(given));
+        given(repository.findById(id)).willReturn(Optional.empty());
 
 
         catchException(() -> subject.delete(id));
+
+
+        assertThat(caughtException(), instanceOf(NotFoundException.class));
     }
 
     @Test
