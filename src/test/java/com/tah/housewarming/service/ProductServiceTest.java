@@ -171,6 +171,18 @@ class ProductServiceTest {
 
     @Test
     public void shouldDeleteProductCorrectly() {
+        var id = 1;
+        var given = ProductFixture.get()
+                .random()
+                .withId(id)
+                .build();
 
+        given(repository.findById(id)).willReturn(Optional.of(given));
+
+
+        subject.delete(id);
+
+
+        then(repository).should().delete(given);
     }
 }
