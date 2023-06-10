@@ -92,6 +92,15 @@ class ProductServiceTest {
 
         catchException(() -> subject.create(given));
 
+
+        assertThat(caughtException(), instanceOf(RuntimeException.class));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenCreatingProductToInvalidCategory() {
+        var given = CreateProductDTOFixture.get()
+                .random()
+                .build();
     }
 
     @Test
