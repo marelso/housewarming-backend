@@ -121,7 +121,7 @@ class CategoryServiceTest {
         given(repository.findById(id)).willReturn(Optional.empty());
 
 
-        catchException(() -> subject.update(given));
+        catchException(() -> subject.update(id, given));
 
 
         assertThat(caughtException(), instanceOf(RuntimeException.class));
@@ -146,7 +146,7 @@ class CategoryServiceTest {
         given(factory.from(given, existing)).willReturn(given);
 
 
-        var result = subject.update(given);
+        var result = subject.update(id, given);
 
 
         assertThat(result, equalTo(given));
