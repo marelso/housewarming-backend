@@ -19,7 +19,6 @@ import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -28,6 +27,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class ProductServiceTest {
     @Mock
     private ProductRepository repository;
+    @Mock
+    private CategoryService categoryService;
 
     @InjectMocks
     private ProductService subject;
@@ -102,7 +103,8 @@ class ProductServiceTest {
 
     @Test
     public void shouldThrowExceptionWhenCreatingProductToInvalidCategory() {
-        var categories = List.of(1);
+        var id = 1;
+        var categories = List.of(id);
         var given = CreateProductDTOFixture.get()
                 .random()
                 .withCategories(categories)
@@ -110,13 +112,13 @@ class ProductServiceTest {
 
         given(repository.findByName(given.getName())).willReturn(Optional.empty());
         given(repository.findByBrand(given.getBrand())).willReturn(Optional.empty());
+        given(categoryService.findById(id)).willThrow(new NotFoundException("Category" + id));
 
 
         catchException(() -> subject.create(given));
 
 
         assertThat(caughtException(), instanceOf(NotFoundException.class));
-
     }
 
     @Test
