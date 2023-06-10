@@ -1,5 +1,6 @@
 package com.tah.housewarming.service;
 
+import com.tah.housewarming.fixture.ProductFixture;
 import com.tah.housewarming.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -39,5 +41,19 @@ class ProductServiceTest {
         assertThat(caughtException(), instanceOf(RuntimeException.class));
         then(repository).should().findById(id);
         verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    public void shouldReturnCorrectObjectWhenSearchingValidId() {
+        var id = 1;
+        var given = ProductFixture.get().random().withId(id).build();
+
+        given(repository.findById(id)).willReturn(Optional.of(given));
+
+
+        var result = subject.findById(id);
+
+
+        assertThat(result, equalTo(given));
     }
 }
