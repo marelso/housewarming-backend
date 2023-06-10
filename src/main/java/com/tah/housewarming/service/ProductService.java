@@ -29,6 +29,18 @@ public class ProductService {
     }
 
     public ProductDTO create(CreateProductDTO given) {
+        if(productAlreadyExist(given.getName(), given.getBrand()))
+            throw new RuntimeException("This product already exist on database");
+
+
+
         return null;
+    }
+
+    private Boolean productAlreadyExist(String product, String productBrand) {
+        var name = repository.findByName(product);
+        var brand = repository.findByBrand(productBrand);
+
+        return name.isPresent() && brand.isPresent();
     }
 }
