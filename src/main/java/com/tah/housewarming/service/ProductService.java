@@ -3,6 +3,7 @@ package com.tah.housewarming.service;
 import com.tah.housewarming.domain.Product;
 import com.tah.housewarming.dto.CreateProductDTO;
 import com.tah.housewarming.dto.ProductDTO;
+import com.tah.housewarming.exception.IncorrectValueException;
 import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class ProductService {
 
     public ProductDTO create(CreateProductDTO given) {
         if(productAlreadyExist(given.getName(), given.getBrand()))
-            throw new RuntimeException("This product already exist on database");
+            throw new IncorrectValueException("This product already exist on database");
 
 
 
