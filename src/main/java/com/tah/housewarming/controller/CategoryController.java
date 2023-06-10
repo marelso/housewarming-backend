@@ -4,6 +4,7 @@ import com.tah.housewarming.domain.Category;
 import com.tah.housewarming.service.CategoryService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,22 +22,25 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category get(@PathVariable("categoryId") Integer id) {
+    public Category get(@PathVariable("id") Integer id) {
         return this.service.findById(id);
     }
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public Category create(@RequestBody String name) {
         return this.service.create(name);
     }
 
     @PutMapping("/{id}")
-    public Category update(@PathVariable("categoryId") Integer id, @RequestBody Category category) {
+    @ResponseStatus(HttpStatus.OK)
+    public Category update(@PathVariable("id") Integer id, @RequestBody Category category) {
         return this.service.update(id, category);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("categoryId") Integer id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("id") Integer id) {
         this.service.delete(id);
     }
 }
