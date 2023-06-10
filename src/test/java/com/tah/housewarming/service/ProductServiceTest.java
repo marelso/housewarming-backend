@@ -159,10 +159,6 @@ class ProductServiceTest {
     @Test
     public void shouldThrowExceptionWhenDeletingInvalidProduct() {
         var id = 1;
-        var given = ProductFixture.get()
-                .random()
-                .withId(id)
-                .build();
 
         given(repository.findById(id)).willReturn(Optional.empty());
 
