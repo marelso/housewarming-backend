@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface CategoryProductRepository extends JpaRepository<CategoryProduct, Integer> {
     List<CategoryProduct> findAllByCategoryId(Integer categoryId);
     Optional<CategoryProduct> findAllByCategoryIdAndProductId(Integer categoryId, Integer productId);
+    void deleteByCategoryId(Integer categoryId);
+    void deleteByProductId(Integer productId);
 }
