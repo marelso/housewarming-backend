@@ -12,7 +12,19 @@ import java.util.List;
 public class CategoryProductService {
     private final CategoryProductRepository repository;
 
-    List<CategoryProduct> find(Integer categoryId) {
+    public void create(Integer categoryId, Integer productId) {
+        if(!relationAlreadyExist(categoryId, productId)) {
+            var relation = new CategoryProduct();
+            relation.setCategoryId(categoryId);
+            relation.setProductId(productId);
+
+            repository.save(relation);
+        }
+    }
+    private Boolean relationAlreadyExist(Integer categoryId, Integer productId) {
+        return repository.findAllByCategoryIdAndProductId(categoryId, productId).isPresent();
+    }
+    public List<CategoryProduct> find(Integer categoryId) {
         return repository.findAllByCategoryId(categoryId);
     }
 }
