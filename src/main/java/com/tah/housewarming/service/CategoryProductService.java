@@ -27,4 +27,10 @@ public class CategoryProductService {
     public List<CategoryProduct> find(Integer categoryId) {
         return repository.findAllByCategoryId(categoryId);
     }
+    public void deleteByCategory(Integer categoryId) {
+        repository.deleteByCategoryId(categoryId);
+    }
+    public void deleteByProduct(Integer productId) {
+        repository.deleteByProductId(productId);
+    }
 }
