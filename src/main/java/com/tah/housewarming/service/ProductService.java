@@ -23,8 +23,9 @@ public class ProductService {
     private final CategoryService categoryService;
     private final CategoryProductService relationService;
 
-    public Product findById(Integer id) {
-        return get(id).orElseThrow(() -> new NotFoundException("There is no product with id: " + id));
+    public ProductDTO findById(Integer id) {
+        return factory.from(get(id).orElseThrow(() -> new NotFoundException("There is no product with id: " + id))
+                , categoryService.getCategoriesNamesByProduct(id));
     }
 
     private Optional<Product> get(Integer id) {
@@ -71,7 +72,7 @@ public class ProductService {
 
     public void delete(Integer id) {
         var product = findById(id);
-
-        this.repository.delete(product);
+        this.relationService.deleteByProduct(id);
+        this.repository.deleteById(id);
     }
 }
