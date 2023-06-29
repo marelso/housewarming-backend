@@ -9,7 +9,6 @@ import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.jsf.FacesContextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public class ProductService {
     private final ProductFactory factory;
     private final ProductRepository repository;
     private final CategoryService categoryService;
+    private final CategoryProductService relationService;
 
     public Product findById(Integer id) {
         return get(id)
@@ -43,9 +43,16 @@ public class ProductService {
             throw new NotFoundException("Invalid category list");
         }
 
-        var product = factory.from(given);
+        var product = this.repository.save(factory.from(given));
+        var categories = new ArrayList<String>();
+        given.getCategories().forEach(
+                (categoryId) -> {
+                    relationService.create(categoryId, product.getId());
+                    categories.add(categoryService.findById(categoryId).getName());
+                }
+        );
 
-        return factory.from(this.repository.save(product));
+        return factory.from(product, categories);
     }
 
     private Boolean productAlreadyExist(String product, String productBrand) {
