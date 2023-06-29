@@ -31,7 +31,7 @@ public class CategoryService {
     }
 
     public Category create(String category) {
-        if(categoryAlreadyTaken(category))
+        if (categoryAlreadyTaken(category))
             throw new IncorrectValueException("This category already exists.");
 
         return this.repository.save(factory.from(category));
@@ -46,7 +46,7 @@ public class CategoryService {
     public Category update(Integer id, Category category) {
         var existingCategory = findById(id);
 
-        if(categoryAlreadyTaken(category.getName()))
+        if (categoryAlreadyTaken(category.getName()))
             throw new IncorrectValueException("This category already exists.");
 
         existingCategory = factory.from(category, existingCategory);
