@@ -15,7 +15,6 @@ public class ProductFactory {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setBrand(dto.getBrand());
-        product.setCount(dto.getCount());
         product.setLinksList(dto.getLinksList());
 
         return product;
@@ -28,7 +27,6 @@ public class ProductFactory {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setBrand(dto.getBrand());
-        product.setCount(dto.getCount());
         product.setLinksList(dto.getLinksList());
         //product.setCategories(categories);
 
