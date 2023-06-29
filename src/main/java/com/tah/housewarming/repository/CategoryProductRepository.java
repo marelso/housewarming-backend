@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface CategoryProductRepository extends JpaRepository<CategoryProduct, Integer> {
     List<CategoryProduct> findAllByCategoryId(Integer categoryId);
+    List<CategoryProduct> findAllByProductId(Integer productId);
     Optional<CategoryProduct> findAllByCategoryIdAndProductId(Integer categoryId, Integer productId);
     void deleteByCategoryId(Integer categoryId);
     void deleteByProductId(Integer productId);
