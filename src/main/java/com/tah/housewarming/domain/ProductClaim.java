@@ -2,9 +2,12 @@ package com.tah.housewarming.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -16,5 +19,9 @@ public class ProductClaim {
     private Integer id;
     private Integer productId;
     private String username;
-    private Integer count;
+    private Boolean available;
+    @CreatedDate
+    private Date createdAt;
+    @LastModifiedDate
+    private Date lastModifiedDate;
 }
