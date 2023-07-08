@@ -25,11 +25,15 @@ public class ProductService {
     private final CategoryProductService relationService;
 
     public ProductDTO findById(Integer id) {
-        var product = get(id).orElseThrow(() -> new NotFoundException("There is no product with id: " + id));
+        var product = findProductById(id);
         var categoriesNames = categoryService.getCategoriesNamesByProduct(id);
         var quantity = claimService.getProductQuantity(id);
 
         return factory.from(product, categoriesNames, quantity);
+    }
+
+    private Product findProductById(Integer id) {
+        return get(id).orElseThrow(() -> new NotFoundException("There is no product with id: " + id));
     }
 
     private Optional<Product> get(Integer id) {
@@ -84,5 +88,22 @@ public class ProductService {
         this.claimService.deleteByProductId(id);
         this.relationService.deleteByProduct(id);
         this.repository.deleteById(id);
+    }
+
+    public ProductDTO claim(Integer id) {
+        if(!isAvailable(id)) {
+            throw new IncorrectValueException("This product is no longer available.");
+        }
+
+        claimService.claimProduct(id);
+
+        var categories = categoryService.getCategoriesNamesByProduct(id);
+        var quantity = claimService.getProductQuantity(id);
+
+        return this.factory.from(findProductById(id), categories, quantity);
+    }
+
+    private Boolean isAvailable(Integer id) {
+        return get(id).isPresent() && (claimService.isAvailable(id));
     }
 }
