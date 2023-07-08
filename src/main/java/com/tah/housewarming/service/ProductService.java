@@ -90,12 +90,12 @@ public class ProductService {
         this.repository.deleteById(id);
     }
 
-    public ProductDTO claim(Integer id) {
+    public ProductDTO claim(Integer id, String username) {
         if(!isAvailable(id)) {
             throw new IncorrectValueException("This product is no longer available.");
         }
 
-        claimService.claimProduct(id);
+        claimService.claimProduct(id, username);
 
         var categories = categoryService.getCategoriesNamesByProduct(id);
         var quantity = claimService.getProductQuantity(id);
