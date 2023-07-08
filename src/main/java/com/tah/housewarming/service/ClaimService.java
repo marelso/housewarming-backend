@@ -34,4 +34,8 @@ public class ClaimService {
 
         return entry;
     }
+
+    public void deleteByProductId(Integer id) {
+        this.repository.deleteAllByProductId(id);
+    }
 }
