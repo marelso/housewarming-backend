@@ -21,11 +21,15 @@ public class ProductService {
     private final ProductFactory factory;
     private final ProductRepository repository;
     private final CategoryService categoryService;
+    private final ClaimService claimService;
     private final CategoryProductService relationService;
 
     public ProductDTO findById(Integer id) {
-        return factory.from(get(id).orElseThrow(() -> new NotFoundException("There is no product with id: " + id))
-                , categoryService.getCategoriesNamesByProduct(id));
+        var product = get(id).orElseThrow(() -> new NotFoundException("There is no product with id: " + id));
+        var categoriesNames = categoryService.getCategoriesNamesByProduct(id);
+        var quantity = claimService.getProductQuantity(id);
+
+        return factory.from(product, categoriesNames, quantity);
     }
 
     private Optional<Product> get(Integer id) {
@@ -33,10 +37,12 @@ public class ProductService {
     }
 
     public List<ProductDTO> findAll() {
-        return this.repository.findAll()
-                .stream()
-                .map((product) -> factory.from(product, categoryService.getCategoriesNamesByProduct(product.getId())))
-                .collect(Collectors.toList());
+        return this.repository.findAll().stream().map((product) -> {
+            var quantity = claimService.getProductQuantity(product.getId());
+            var categoriesNames = categoryService.getCategoriesNamesByProduct(product.getId());
+
+            return factory.from(product, categoriesNames, quantity);
+        }).collect(Collectors.toList());
     }
 
     public ProductDTO create(CreateProductDTO given) {
@@ -48,13 +54,16 @@ public class ProductService {
         }
 
         var product = this.repository.save(factory.from(given));
+
+        Integer count = claimService.insert(product.getId(), given.getCount());
+
         var categories = new ArrayList<String>();
         given.getCategories().forEach((categoryId) -> {
             relationService.create(categoryId, product.getId());
             categories.add(categoryService.findById(categoryId).getName());
         });
 
-        return factory.from(product, categories);
+        return factory.from(product, categories, count);
     }
 
     private Boolean productAlreadyExist(String product, String productBrand) {
@@ -72,6 +81,7 @@ public class ProductService {
 
     public void delete(Integer id) {
         var product = findById(id);
+        this.claimService.deleteByProductId(id);
         this.relationService.deleteByProduct(id);
         this.repository.deleteById(id);
     }
