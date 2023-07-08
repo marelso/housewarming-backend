@@ -9,4 +9,6 @@ public interface ProductClaimRepository extends JpaRepository<ProductClaim, Inte
 
     Integer countByProductIdAndAvailableTrue(Integer productId);
 
+    void deleteAllByProductId(Integer productId);
+
 }
