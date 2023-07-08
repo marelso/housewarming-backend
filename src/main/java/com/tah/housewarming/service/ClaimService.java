@@ -1,6 +1,7 @@
 package com.tah.housewarming.service;
 
 import com.tah.housewarming.domain.ProductClaim;
+import com.tah.housewarming.exception.IncorrectValueException;
 import com.tah.housewarming.repository.ProductClaimRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,21 @@ public class ClaimService {
 
     public void deleteByProductId(Integer id) {
         this.repository.deleteAllByProductId(id);
+    }
+
+    public void claimProduct(Integer id) {
+        var entry = this.repository.findFirstByProductIdAndAvailableTrue(id);
+
+        if(entry.isEmpty())
+            throw new IncorrectValueException("This product is no longer available.");
+
+        var product = entry.get();
+        product.setAvailable(false);
+
+        this.repository.save(product);
+    }
+
+    public boolean isAvailable(Integer id) {
+        return getProductQuantity(id) > 0;
     }
 }
