@@ -40,7 +40,7 @@ public class ClaimService {
         this.repository.deleteAllByProductId(id);
     }
 
-    public void claimProduct(Integer id) {
+    public void claimProduct(Integer id, String username) {
         var entry = this.repository.findFirstByProductIdAndAvailableTrue(id);
 
         if(entry.isEmpty())
@@ -48,6 +48,7 @@ public class ClaimService {
 
         var product = entry.get();
         product.setAvailable(false);
+        product.setUsername(username);
 
         this.repository.save(product);
     }
