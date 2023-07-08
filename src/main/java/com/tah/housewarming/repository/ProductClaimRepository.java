@@ -2,8 +2,8 @@ package com.tah.housewarming.repository;
 
 import com.tah.housewarming.domain.ProductClaim;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface ProductClaimRepository extends JpaRepository<ProductClaim, Integer> {
 
@@ -11,4 +11,5 @@ public interface ProductClaimRepository extends JpaRepository<ProductClaim, Inte
 
     void deleteAllByProductId(Integer productId);
 
+    Optional<ProductClaim> findFirstByProductIdAndAvailableTrue(Integer productId);
 }
