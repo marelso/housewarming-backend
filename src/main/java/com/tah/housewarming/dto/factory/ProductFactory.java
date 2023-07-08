@@ -20,7 +20,7 @@ public class ProductFactory {
         return product;
     }
 
-    public ProductDTO from(Product dto, List<String> categories) {
+    public ProductDTO from(Product dto, List<String> categories, Integer count) {
         var product = new ProductDTO();
 
         product.setId(dto.getId());
@@ -29,6 +29,7 @@ public class ProductFactory {
         product.setBrand(dto.getBrand());
         product.setLinksList(dto.getLinksList());
         product.setCategories(categories);
+        product.setCount(count);
 
         return product;
     }
