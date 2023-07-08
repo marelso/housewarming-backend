@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+    private final CategoryProductService relationService;
     private final CategoryRepository repository;
     private final CategoryFactory factory;
 
@@ -22,8 +24,7 @@ public class CategoryService {
     }
 
     public Category findById(Integer id) {
-        return get(id)
-                .orElseThrow(() -> new NotFoundException("Category" + id));
+        return get(id).orElseThrow(() -> new NotFoundException("Category" + id));
     }
 
     public Optional<Category> get(Integer id) {
@@ -31,8 +32,7 @@ public class CategoryService {
     }
 
     public Category create(String category) {
-        if(categoryAlreadyTaken(category))
-            throw new IncorrectValueException("This category already exists.");
+        if (categoryAlreadyTaken(category)) throw new IncorrectValueException("This category already exists.");
 
         return this.repository.save(factory.from(category));
     }
@@ -46,7 +46,7 @@ public class CategoryService {
     public Category update(Integer id, Category category) {
         var existingCategory = findById(id);
 
-        if(categoryAlreadyTaken(category.getName()))
+        if (categoryAlreadyTaken(category.getName()))
             throw new IncorrectValueException("This category already exists.");
 
         existingCategory = factory.from(category, existingCategory);
@@ -58,5 +58,11 @@ public class CategoryService {
         var category = findById(id);
 
         repository.delete(category);
+    }
+
+    public List<String> getCategoriesNamesByProduct(Integer productId) {
+        var ids = this.relationService.findByProductId(productId);
+
+        return ids.stream().map(id -> findById(id).getName()).collect(Collectors.toList());
     }
 }

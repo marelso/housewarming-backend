@@ -15,22 +15,21 @@ public class ProductFactory {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setBrand(dto.getBrand());
-        product.setCount(dto.getCount());
         product.setLinksList(dto.getLinksList());
 
         return product;
     }
 
-    public ProductDTO from(Product dto) {
+    public ProductDTO from(Product dto, List<String> categories, Integer count) {
         var product = new ProductDTO();
 
         product.setId(dto.getId());
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setBrand(dto.getBrand());
-        product.setCount(dto.getCount());
         product.setLinksList(dto.getLinksList());
-        //product.setCategories(categories);
+        product.setCategories(categories);
+        product.setCount(count);
 
         return product;
     }

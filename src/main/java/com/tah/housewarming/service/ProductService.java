@@ -9,11 +9,11 @@ import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.jsf.FacesContextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,31 +21,53 @@ public class ProductService {
     private final ProductFactory factory;
     private final ProductRepository repository;
     private final CategoryService categoryService;
+    private final ClaimService claimService;
+    private final CategoryProductService relationService;
 
-    public Product findById(Integer id) {
-        return get(id)
-                .orElseThrow(() -> new NotFoundException("There is no product with id: " + id));
+    public ProductDTO findById(Integer id) {
+        var product = findProductById(id);
+        var categoriesNames = categoryService.getCategoriesNamesByProduct(id);
+        var quantity = claimService.getProductQuantity(id);
+
+        return factory.from(product, categoriesNames, quantity);
+    }
+
+    private Product findProductById(Integer id) {
+        return get(id).orElseThrow(() -> new NotFoundException("There is no product with id: " + id));
     }
 
     private Optional<Product> get(Integer id) {
         return this.repository.findById(id);
     }
 
-    public List<Product> findAll() {
-        return this.repository.findAll();
+    public List<ProductDTO> findAll() {
+        return this.repository.findAll().stream().map((product) -> {
+            var quantity = claimService.getProductQuantity(product.getId());
+            var categoriesNames = categoryService.getCategoriesNamesByProduct(product.getId());
+
+            return factory.from(product, categoriesNames, quantity);
+        }).collect(Collectors.toList());
     }
 
     public ProductDTO create(CreateProductDTO given) {
-        if(productAlreadyExist(given.getName(), given.getBrand()))
+        if (productAlreadyExist(given.getName(), given.getBrand()))
             throw new IncorrectValueException("This product already exist on database");
 
-        if(!categoryDoesExist(given.getCategories())) {
+        if (!categoryDoesExist(given.getCategories())) {
             throw new NotFoundException("Invalid category list");
         }
 
-        var product = factory.from(given);
+        var product = this.repository.save(factory.from(given));
 
-        return factory.from(this.repository.save(product));
+        Integer count = claimService.insert(product.getId(), given.getCount());
+
+        var categories = new ArrayList<String>();
+        given.getCategories().forEach((categoryId) -> {
+            relationService.create(categoryId, product.getId());
+            categories.add(categoryService.findById(categoryId).getName());
+        });
+
+        return factory.from(product, categories, count);
     }
 
     private Boolean productAlreadyExist(String product, String productBrand) {
@@ -63,7 +85,25 @@ public class ProductService {
 
     public void delete(Integer id) {
         var product = findById(id);
+        this.claimService.deleteByProductId(id);
+        this.relationService.deleteByProduct(id);
+        this.repository.deleteById(id);
+    }
 
-        this.repository.delete(product);
+    public ProductDTO claim(Integer id, String username) {
+        if(!isAvailable(id)) {
+            throw new IncorrectValueException("This product is no longer available.");
+        }
+
+        claimService.claimProduct(id, username);
+
+        var categories = categoryService.getCategoriesNamesByProduct(id);
+        var quantity = claimService.getProductQuantity(id);
+
+        return this.factory.from(findProductById(id), categories, quantity);
+    }
+
+    private Boolean isAvailable(Integer id) {
+        return get(id).isPresent() && (claimService.isAvailable(id));
     }
 }

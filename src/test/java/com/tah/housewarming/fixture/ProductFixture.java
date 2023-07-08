@@ -14,7 +14,6 @@ public class ProductFixture {
     private String name;
     private String description;
     private String brand;
-    private Integer count;
     private List<String> linksList;
 
     public static ProductFixture get() {
@@ -27,7 +26,6 @@ public class ProductFixture {
                 , name
                 , description
                 , brand
-                , count
                 , linksList
         );
     }
@@ -37,7 +35,6 @@ public class ProductFixture {
         this.name = RandomGenerator.string();
         this.description = RandomGenerator.string(654);
         this.brand = RandomGenerator.string(16);
-        this.count = RandomGenerator.integer(50);
         this.linksList = RandomGenerator.stringList();
 
         return this;
@@ -63,12 +60,6 @@ public class ProductFixture {
 
     public ProductFixture withBrand(String brand) {
         this.brand = brand;
-
-        return this;
-    }
-
-    public ProductFixture withCount(Integer count) {
-        this.count = count;
 
         return this;
     }

@@ -22,14 +22,6 @@ public class Product {
     private String name;
     private String description;
     private String brand;
-    private Integer count;
     @ElementCollection
     private List<String> linksList;
-
-    public Boolean isProductAvailable() {
-        if(this.count == null)
-            return false;
-
-        return !(this.count <= 0);
-    }
 }
