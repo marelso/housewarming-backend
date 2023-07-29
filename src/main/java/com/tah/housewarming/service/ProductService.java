@@ -9,6 +9,7 @@ import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,11 +84,12 @@ public class ProductService {
         return true;
     }
 
+    @Transactional
     public void delete(Integer id) {
         var product = findById(id);
-        this.claimService.deleteByProductId(id);
-        this.relationService.deleteByProduct(id);
-        this.repository.deleteById(id);
+        this.claimService.deleteByProductId(product.getId());
+        this.relationService.deleteByProduct(product.getId());
+        this.repository.deleteById(product.getId());
     }
 
     public ProductDTO claim(Integer id, String username) {
