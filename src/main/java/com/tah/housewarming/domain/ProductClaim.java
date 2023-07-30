@@ -22,7 +22,9 @@ public class ProductClaim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId", referencedColumnName = "id")
+    private Product product;
     private String username;
     private Boolean available;
     @CreatedDate

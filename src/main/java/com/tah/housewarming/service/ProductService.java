@@ -60,7 +60,7 @@ public class ProductService {
 
         var product = this.repository.save(factory.from(given));
 
-        Integer count = claimService.insert(product.getId(), given.getCount());
+        Integer count = claimService.insert(product, given.getCount());
 
         var categories = new ArrayList<String>();
         given.getCategories().forEach((categoryId) -> {
@@ -93,7 +93,7 @@ public class ProductService {
     }
 
     public ProductDTO claim(Integer id, String username) {
-        if(!isAvailable(id)) {
+        if (!isAvailable(id)) {
             throw new IncorrectValueException("This product is no longer available.");
         }
 
@@ -107,5 +107,16 @@ public class ProductService {
 
     private Boolean isAvailable(Integer id) {
         return get(id).isPresent() && (claimService.isAvailable(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findCategoryProducts(Integer categoryId) {
+        var validId = categoryService.findById(categoryId).getId();
+
+        var products = this.claimService.findByCategoryId(validId);
+
+        var list = products.stream().map(claim -> this.findById(claim.getProduct().getId())).collect(Collectors.toList());
+
+        return list;
     }
 }
