@@ -72,8 +72,8 @@ public class ProductService {
     }
 
     private Boolean productAlreadyExist(String product, String productBrand) {
-        var name = repository.findByName(product);
-        var brand = repository.findByBrand(productBrand);
+        var name = repository.findFirstByName(product);
+        var brand = repository.findFirstByBrand(productBrand);
 
         return name.isPresent() && brand.isPresent();
     }
