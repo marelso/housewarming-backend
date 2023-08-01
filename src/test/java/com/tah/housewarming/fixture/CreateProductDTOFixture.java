@@ -15,6 +15,7 @@ public class CreateProductDTOFixture {
     private String description;
     private String brand;
     private Integer count;
+    private String source;
     private List<String> linksList;
     private List<Integer> categories;
 
@@ -28,6 +29,7 @@ public class CreateProductDTOFixture {
                 , description
                 , brand
                 , count
+                , source
                 , linksList
                 , categories
         );

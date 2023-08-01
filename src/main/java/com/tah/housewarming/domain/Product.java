@@ -21,6 +21,7 @@ public class Product {
     private Integer id;
     private String name;
     private String description;
+    private String source;
     private String brand;
     @ElementCollection
     private List<String> linksList;

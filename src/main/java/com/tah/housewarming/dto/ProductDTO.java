@@ -17,6 +17,7 @@ public class ProductDTO {
     private String description;
     private String brand;
     private Integer count;
+    private String source;
     private List<String> linksList;
     private List<String> categories;
 }

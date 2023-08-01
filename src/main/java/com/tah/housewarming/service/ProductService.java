@@ -9,6 +9,7 @@ import com.tah.housewarming.exception.NotFoundException;
 import com.tah.housewarming.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class ProductService {
 
         var product = this.repository.save(factory.from(given));
 
-        Integer count = claimService.insert(product.getId(), given.getCount());
+        Integer count = claimService.insert(product, given.getCount());
 
         var categories = new ArrayList<String>();
         given.getCategories().forEach((categoryId) -> {
@@ -71,8 +72,8 @@ public class ProductService {
     }
 
     private Boolean productAlreadyExist(String product, String productBrand) {
-        var name = repository.findByName(product);
-        var brand = repository.findByBrand(productBrand);
+        var name = repository.findFirstByName(product);
+        var brand = repository.findFirstByBrand(productBrand);
 
         return name.isPresent() && brand.isPresent();
     }
@@ -83,15 +84,16 @@ public class ProductService {
         return true;
     }
 
+    @Transactional
     public void delete(Integer id) {
         var product = findById(id);
-        this.claimService.deleteByProductId(id);
-        this.relationService.deleteByProduct(id);
-        this.repository.deleteById(id);
+        this.claimService.deleteByProductId(product.getId());
+        this.relationService.deleteByProduct(product.getId());
+        this.repository.deleteById(product.getId());
     }
 
     public ProductDTO claim(Integer id, String username) {
-        if(!isAvailable(id)) {
+        if (!isAvailable(id)) {
             throw new IncorrectValueException("This product is no longer available.");
         }
 
@@ -105,5 +107,16 @@ public class ProductService {
 
     private Boolean isAvailable(Integer id) {
         return get(id).isPresent() && (claimService.isAvailable(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findCategoryProducts(Integer categoryId) {
+        var validId = categoryService.findById(categoryId).getId();
+
+        var products = this.claimService.findByCategoryId(validId);
+
+        var list = products.stream().map(claim -> this.findById(claim.getProduct().getId())).collect(Collectors.toList());
+
+        return list;
     }
 }

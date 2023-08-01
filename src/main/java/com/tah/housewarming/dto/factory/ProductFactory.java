@@ -16,6 +16,7 @@ public class ProductFactory {
         product.setDescription(dto.getDescription());
         product.setBrand(dto.getBrand());
         product.setLinksList(dto.getLinksList());
+        product.setSource(dto.getSource());
 
         return product;
     }
@@ -30,6 +31,7 @@ public class ProductFactory {
         product.setLinksList(dto.getLinksList());
         product.setCategories(categories);
         product.setCount(count);
+        product.setSource(dto.getSource());
 
         return product;
     }

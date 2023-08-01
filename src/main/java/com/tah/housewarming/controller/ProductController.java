@@ -30,6 +30,11 @@ public class ProductController {
         return this.service.findAll();
     }
 
+    @GetMapping("/category")
+    public List<ProductDTO> findCategoryProducts(@RequestParam(required = true) Integer categoryId) {
+        return service.findCategoryProducts(categoryId);
+    }
+
     @GetMapping("/{id}")
     public ProductDTO get(@PathVariable("id") Integer id) {
         return this.service.findById(id);

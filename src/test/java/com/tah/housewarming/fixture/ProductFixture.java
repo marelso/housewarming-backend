@@ -13,6 +13,7 @@ public class ProductFixture {
     private Integer id;
     private String name;
     private String description;
+    private String source;
     private String brand;
     private List<String> linksList;
 
@@ -25,6 +26,7 @@ public class ProductFixture {
                 id
                 , name
                 , description
+                , source
                 , brand
                 , linksList
         );

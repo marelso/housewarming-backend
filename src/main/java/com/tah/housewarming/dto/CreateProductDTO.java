@@ -16,6 +16,7 @@ public class CreateProductDTO {
     private String description;
     private String brand;
     private Integer count;
+    private String source;
     private List<String> linksList;
     private List<Integer> categories;
 }
