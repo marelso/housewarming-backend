@@ -1,5 +1,6 @@
 package com.tah.housewarming.fixture;
 
+import com.tah.housewarming.domain.Link;
 import com.tah.housewarming.domain.Product;
 import com.tah.housewarming.util.RandomGenerator;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class ProductFixture {
     private String description;
     private String source;
     private String brand;
-    private List<String> linksList;
+    private List<Link> linksList;
 
     public static ProductFixture get() {
         return new ProductFixture();
@@ -37,7 +38,7 @@ public class ProductFixture {
         this.name = RandomGenerator.string();
         this.description = RandomGenerator.string(654);
         this.brand = RandomGenerator.string(16);
-        this.linksList = RandomGenerator.stringList();
+//        this.linksList = RandomGenerator.stringList();
 
         return this;
     }
@@ -66,7 +67,7 @@ public class ProductFixture {
         return this;
     }
 
-    public ProductFixture withLinks(List<String> links) {
+    public ProductFixture withLinks(List<Link> links) {
         this.linksList = links;
 
         return this;

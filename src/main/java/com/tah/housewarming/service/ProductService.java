@@ -24,6 +24,7 @@ public class ProductService {
     private final CategoryService categoryService;
     private final ClaimService claimService;
     private final CategoryProductService relationService;
+    private final LinkService linkService;
 
     public ProductDTO findById(Integer id) {
         var product = findProductById(id);
@@ -58,6 +59,8 @@ public class ProductService {
             throw new NotFoundException("Invalid category list");
         }
 
+        given.setLinksList(linkService.create(given.getLinksList()));
+
         var product = this.repository.save(factory.from(given));
 
         Integer count = claimService.insert(product, given.getCount());
@@ -87,6 +90,7 @@ public class ProductService {
     @Transactional
     public void delete(Integer id) {
         var product = findById(id);
+        this.linkService.delete(product.getLinksList());
         this.claimService.deleteByProductId(product.getId());
         this.relationService.deleteByProduct(product.getId());
         this.repository.deleteById(product.getId());
