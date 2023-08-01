@@ -1,5 +1,6 @@
 package com.tah.housewarming.fixture;
 
+import com.tah.housewarming.domain.Link;
 import com.tah.housewarming.domain.Product;
 import com.tah.housewarming.dto.CreateProductDTO;
 import com.tah.housewarming.util.RandomGenerator;
@@ -16,7 +17,7 @@ public class CreateProductDTOFixture {
     private String brand;
     private Integer count;
     private String source;
-    private List<String> linksList;
+    private List<Link> linksList;
     private List<Integer> categories;
 
     public static CreateProductDTOFixture get() {
@@ -40,7 +41,6 @@ public class CreateProductDTOFixture {
         this.description = RandomGenerator.string(654);
         this.brand = RandomGenerator.string(16);
         this.count = RandomGenerator.integer(50);
-        this.linksList = RandomGenerator.stringList();
         this.categories = RandomGenerator.integerList();
         return this;
     }
@@ -65,7 +65,7 @@ public class CreateProductDTOFixture {
         return this;
     }
 
-    public CreateProductDTOFixture withLinks(List<String> links) {
+    public CreateProductDTOFixture withLinks(List<Link> links) {
         this.linksList = links;
         return this;
     }

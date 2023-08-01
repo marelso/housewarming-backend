@@ -7,22 +7,17 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Product {
+public class Link {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    private String description;
-    private String source;
-    private String brand;
-    @ElementCollection
-    private List<Link> linksList;
+    private String platform;
+    private String url;
 }
